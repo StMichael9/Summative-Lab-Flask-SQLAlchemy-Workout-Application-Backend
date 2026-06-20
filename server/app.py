@@ -1,7 +1,12 @@
 from flask import Flask, jsonify, request
 from flask_migrate import Migrate
-from models import Workout, WorkoutExercises, db, Exercise
-from schemas import ExerciseSchema, WorkoutExerciseSchema, WorkoutSchema
+
+try:
+    from .models import Workout, WorkoutExercises, db, Exercise
+    from .schemas import ExerciseSchema, WorkoutExerciseSchema, WorkoutSchema
+except ImportError:
+    from models import Workout, WorkoutExercises, db, Exercise
+    from schemas import ExerciseSchema, WorkoutExerciseSchema, WorkoutSchema
 
 app = Flask(__name__)
 
@@ -119,7 +124,8 @@ def add_exercise_to_workout(workout_id, exercise_id):
     )
     db.session.add(new_workout_exercise)
     db.session.commit()
-    result = workout_exercises_schema.dump(new_workout_exercise)
+    result = workout_exercise_schema.dump(new_workout_exercise)
+
     return result, 201
 
 

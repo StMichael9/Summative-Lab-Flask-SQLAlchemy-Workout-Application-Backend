@@ -1,5 +1,9 @@
 from marshmallow import Schema, fields, validates_schema, ValidationError
-from models import Exercise, Workout, WorkoutExercises
+
+try:
+    from .models import Exercise, Workout, WorkoutExercises
+except ImportError:
+    from models import Exercise, Workout, WorkoutExercises
 
 
 class ExerciseSchema(Schema):
@@ -22,11 +26,12 @@ class WorkoutSchema(Schema):
 
 class WorkoutExerciseSchema(Schema):
     id = fields.Int(dump_only=True)
-    workout_id = fields.Int(required=True)
-    exercise_id = fields.Int(required=True)
-    reps = fields.Int(required=True)
-    sets = fields.Int(required=True)
-    duration_seconds = fields.Int()
+    workout_id = fields.Int(dump_only=True)
+    exercise_id = fields.Int(dump_only=True)
+    reps = fields.Int(required=False)
+    sets = fields.Int(required=False)
+    duration_seconds = fields.Int(required=False)
+
 
     @validates_schema
     def validate_reps_sets(self, data, **kwargs):
